@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div style="position: relative;height: 100px;width: 100px;" >
+        <img src="/static/imgs/default.png" alt="" style="position: absolute;height:100%;width:100%;border-radius: 50%;overflow: hidden" id="prevImg">
+        <input type="file" style="position: absolute;left: 0px;top:0px;right:0px;bottom:0px;opacity: 0;z-index: 2" id="avatarImg" name="AvatarImg">
+    </div>
+    <div>点击图片更换(<a href="">撤销</a>)</div>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="avatar" id="avatar">
+        <input type="text" name="username">
+        <input type="submit" value="提交">
+    </form>
+    <script src="/static/js/jquery-3.1.1.js"></script>
+    <script>
+        $(function () {
+            bindAvatar();
+        })
+        function bindAvatar() {
+            $("#avatarImg").change(function (e) {
+                let img_obj=e.currentTarget.files[0];
+                let form = new FormData();
+                form.append('img_upload',img_obj);
+                $.ajax({
+                    url:'/form_data_upload/',
+                    type:'post',
+                    data:form,
+                    processData:false,
+                    contentType:false,
+                    success:function (arg) {
+                        $("#prevImg").attr('src','/'+arg);
+                        $('#avatar').val(arg);
+                    }
+
+                })
+            })
+        }
+    </script>
+</body>
+</html>

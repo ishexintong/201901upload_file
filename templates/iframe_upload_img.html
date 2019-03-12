@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sakula_iframe</title>
+</head>
+<body>
+    <div style="position: relative;height: 100px;width: 100px; ">
+        <iframe src="" frameborder="0" name="fffff" id="ifm" style="display: none"></iframe>
+        <form action="/upload_iframe/" method="post" enctype="multipart/form-data" target="fffff">
+            {% csrf_token %}
+            <img src="/static/imgs/default.png" alt="" style="position: absolute;height: 100%;width: 100%;border-radius: 50%" id="prevImg">
+            <input type="file" style="position: absolute;left: 0px;top: 0px;right: 0px;bottom: 0px;opacity: 0" id="avatar" name="avatar">
+        </form>
+    </div>
+    <form action="/iframe_upload_img/" method="post">
+        {% csrf_token %}
+        <input type="text" name="username">
+        <input type="text" name="avatar">
+        <input type="submit" value="提交">
+    </form>
+    <script src="/static/js/jquery-3.1.1.js"></script>
+    <script>
+        $(function () {
+            bindChangeAvatar();
+        })
+        function bindChangeAvatar() {
+            $("#avatar").change(function () {
+                $(this).parent().submit();
+                //
+                $("#ifm")[0].onload=function () {
+                    let iframeContents = $('#ifm')[0].contentWindow.document.body.innerText;
+                    let ifm_detail=JSON.parse(iframeContents);
+                    if(ifm_detail.status){
+                        $("#prevImg").attr('src','/'+ifm_detail.data);
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

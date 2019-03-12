@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div style="position: relative;display: inline-block;height: 100px;width: 100px">
+            <img style="position: absolute;height: 100%;width: 100%;overflow: hidden;border-radius: 50%;" id="previewImg" src="/static/imgs/default.png">
+            <input type="file" style="position: absolute;top:0px;left: 0px;right:0px;bottom: 0px;z-index: 2;opacity: 0;" id="avatarImg" name="avatar_img">
+    </div>
+    <div>点击图片更换(<a href="#">撤销</a>)</div>
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <p><input type="text" name="avatar" id="avatar"></p>
+            <p><input type="text" name="username"></p>
+            <p><input type="submit" value="提交"></p>
+        </div>
+    </form>
+    <script src="/static/js/jquery-3.1.1.js"></script>
+    <script>
+        $(function () {
+            bindChangeAvatar();
+        })
+        function bindChangeAvatar() {
+            $("#avatarImg").change(function (e) {
+                let img_obj=e.currentTarget.files[0];
+                let form = new FormData();
+                form.append('img_upload',img_obj);
+                $.ajax({
+                    url:'/form_data_upload/',
+                    type:'post',
+                    data:form,
+                    processData:false,// tell the jquery not to process the data
+                    contentType:false, // tell the jquery not to set the contentType
+                    success:function (arg) {
+                        //预览
+                        $("#previewImg").attr('src',"/"+arg);
+                        $("#avatar").val(arg);
+                    }
+                })
+            });
+        }
+    </script>
+</body>
+</html>

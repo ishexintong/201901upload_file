@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div style="position:relative;display: inline-block;height: 50px;min-width: 300px;">
+        <div style="position: absolute;top: 0px;left: 0px;right: 0px;bottom: 0px;line-height: 50px;border: 1px dotted #9d9d9d;color: #9d9d9d;z-index: 1;padding-left: 15px;">
+            <span>点击上传文件</span>
+        </div>
+        <input type="file" name="custom_excel" id="excelFile" style="position: absolute;top: 0px;left: 0px;right: 0px;bottom: 0px;z-index: 2;opacity: 0">
+    </div>
+
+    <div>
+        <p><input type="text" name="username"></p>
+        <p><input type="submit" value="提交"></p>
+    </div>
+
+</form>
+<script src="/static/js/jquery-3.1.1.js"></script>
+<script>
+    $(function () {
+        $("#excelFile").change(function (e) {
+            let fileName=e.currentTarget.files[0].name;
+            $(this).prev().find('span').text(fileName);
+        })
+    })
+</script>
+</body>
+</html>
