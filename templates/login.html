@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/login/" method="post">
+        {% csrf_token %}
+        <input type="text" name="username">
+        <input type="password" name="password">
+        <input type="button" value="登录" id="login">
+    </form>
+    <script src="/static/js/jquery-3.1.1.js"></script>
+    <script>
+        $(function () {
+            bindLogin();
+        })
+        function bindLogin() {
+            $("#login").click(function () {
+                $.ajax({
+                    url:'/login/',
+                    type:'post',
+                    //解决 ajax post请求时候 csrf 报错的问题
+                    data:{user:$('[name="username"]').val(),pwd:$('[name="password"]').val(),csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()},
+                    success:function (arg) {
+                        let data=JSON.parse(arg);
+                        console.log(data.url);
+                        if(data.status){
+                            window.location=data.url;
+                        }else{
+                            alert(data.error);
+                        }
+                    }
+                })
+            })
+        }
+    </script>
+</body>
+</html>

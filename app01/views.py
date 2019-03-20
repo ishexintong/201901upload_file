@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse
-
+from django.views import View
 import uuid
 import os
 import json
@@ -71,4 +71,18 @@ def iframe_upload_img(request):
     :return:
     '''
 
-    return render(request,'iframe_upload_img.html')
+    return render(request,'iframe_upload2.html')
+
+class Login(View):
+
+    def get(self,request):
+        return render(request,'login.html')
+
+    def post(self,request):
+        ret={'status':True,'error':None,'url':'/index/'}
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        if username=='alex' and password=='salula':
+            ret['url']='/index/'
+
+        return HttpResponse(json.dumps(ret))

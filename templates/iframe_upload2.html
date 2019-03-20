@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div style="position: relative;height: 100px;width: 100px;">
+        <iframe src="" frameborder="0" name="fffff" id="ifm" style="display: none"></iframe>
+        <form action="/upload_iframe/" method="post" enctype="multipart/form-data" target="fffff">
+            <img src="/static/imgs/default.png" alt="" name="avatar" style="position: absolute;width: 100%;height: 100%;border-radius: 50%" id="prevImg">
+            <input type="file" style="position: absolute;top: 0px;bottom: 0px;left: 0px;right:0px;z-index: 1;opacity: 0" id="avatar" name="avatar">
+        </form>
+    </div>
+    <div>
+        <form action="/iframe_upload_img/" method="post">
+            <input type="text" name="username">
+            <input type="text" name="avatar">
+            <input type="submit" value="提交">
+        </form>
+    </div>
+    <script src="/static/js/jquery-3.1.1.js"></script>
+    <script>
+        $(function () {
+            bindAct();
+        })
+        function bindAct() {
+            $("#avatar").change(function () {
+                //更改文件触发表单的提交
+                $(this).parent().submit();
+                //从ifrmae中获取表单提交的结果
+                $("#ifm")[0].onload=function () {
+                    let iframeContents = $('#ifm')[0].contentWindow.document.body.innerText;
+                    let ifm_detail=JSON.parse(iframeContents);
+                    if(ifm_detail.status){
+                        $("#prevImg").attr('src','/'+ifm_detail.data);
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>
